@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint --fix",
+    "lint": "eslint .",
     "preview": "vite preview",
     "format:fix": "prettier --write .",
     "prepare": "husky install"
