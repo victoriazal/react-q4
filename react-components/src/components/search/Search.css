@@ -1,5 +1,4 @@
 .search {
-  background-color: #102e50;
   height: 200px;
   display: flex;
   justify-content: center;
@@ -10,10 +9,11 @@
   width: 250px;
   height: 40px;
   border-radius: 5px;
-  border: none;
+  border: 0.2px rgb(54, 151, 158) solid;
   padding-left: 5px;
-  background-color: rgb(240, 240, 240);
+  background-color: transparent;
   margin-right: 10px;
+  color: rgb(189, 241, 136);
 }
 
 .search-btn {
@@ -24,8 +24,7 @@
   background-color: transparent;
   color: white;
   text-shadow: 1px 1px 0px #fffd77;
-  font-size: 22px;
-  font-family: 'DM Serif Display', serif;
+  font-size: 14px;
 }
 
 .search-btn:hover {
