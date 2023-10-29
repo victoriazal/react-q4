@@ -1,31 +1,23 @@
 import { Component } from 'react';
 import './Search.css';
+import Results from '../searchResults/Results';
 
 export default class Search extends Component {
-  state = { serachValue: localStorage.getItem('inputData') || '' };
-
-  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchValue: event.target.value });
-    console.log(event.target.value);
+  state = {
+    searchValue: localStorage.getItem('inputData') || '',
+    filter: '',
   };
 
-  componentDidMount() {
-    console.log('Mount');
-    fetch('https://swapi.dev/api/people')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      });
-    // this.setState(JSON.parse(localStorage.getItem("inputData")))
-  }
+  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputData = event.target.value;
+    localStorage.setItem('inputData', inputData);
+    this.setState({ searchValue: inputData });
+  };
 
-  componentDidUpdate(
-    prevProps: Readonly<{}>,
-    prevState: Readonly<{}>,
-    snapshot?: any
-  ): void {
-    localStorage.setItem('inputData', JSON.stringify(this.state));
-  }
+  handleSearchClick = () => {
+    this.setState({ filter: this.state.searchValue });
+  };
+
   render() {
     return (
       <>
@@ -34,11 +26,17 @@ export default class Search extends Component {
             onChange={this.handleSearchChange}
             className="search-input"
             placeholder="..."
+            value={this.state.searchValue || ''}
           ></input>
-          <button type="submit" className="search-btn">
+          <button
+            onClick={this.handleSearchClick}
+            type="submit"
+            className="search-btn"
+          >
             Search
           </button>
         </div>
+        <Results filter={this.state.filter} />
       </>
     );
   }

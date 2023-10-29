@@ -1,14 +1,15 @@
 import { Component } from 'react';
 import './App.css';
 import Search from './components/search/Search';
-import Results from './components/searchResults/Results';
+import ErrorBoundary from './components/errorBoundary/ErrorBoundary';
 
 export default class App extends Component {
   render() {
     return (
       <>
-        <Search />
-        <Results />
+        <ErrorBoundary>
+          <Search />
+        </ErrorBoundary>
       </>
     );
   }
