@@ -1,66 +1,47 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import './Results.css';
 
-export default class Results extends Component {
-  state = {
-    characters: [
-      {
-        name: '',
-        eye_color: '',
-        birth_year: '',
-        id: '',
-      },
-    ],
-    loaded: false,
-    filter: localStorage.getItem('inputValue') || '',
-  };
+export default function Results(props: { clicked: string }) {
+  const [characters, setCharacters] = useState([]);
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [filter] = useState(localStorage.getItem('inputValue') || '');
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  componentDidMount(): void {
+  useEffect(() => {
     fetch('https://swapi.dev/api/people')
       .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          characters: data.results,
-          loaded: true,
-        });
-      });
-  }
-
-  componentDidUpdate(prevProps: Readonly<{ filter: string }>): void {
-    if (prevProps.filter !== this.props.filter) {
-      const lowercaseFilter = this.props.filter
-        .toLowerCase()
-        .replace(/\s/g, '');
-      const filtered = this.state.characters.filter((character) =>
-        character.name
-          .toLowerCase()
-          .replace(/\s/g, '')
-          .includes(lowercaseFilter)
+      .then(
+        (data) => {
+          setCharacters(data.results);
+          setIsLoaded(true);
+        },
+        (error) => {
+          console.log(error);
+          setIsLoaded(true);
+        }
       );
-      this.setState({ characters: filtered });
-    }
-  }
+  }, []);
 
-  render() {
-    return (
-      <>
-        <div className="wrapper">
-          <div className="results">
-            {this.state.loaded ? (
-              this.state.characters.map((elem) => {
+  return (
+    <>
+      <div className="wrapper">
+        <div className="results">
+          {isLoaded ? (
+            filteredCharacters.map(
+              (elem: { id: string; name: string; birth_year: string }) => {
                 return (
                   <div key={elem.id} className="character">
                     <h5>{elem.name}</h5>
-                    <span>Birth year:{elem.birth_year}</span>
+                    <span>Birth year: {elem.birth_year}</span>
                   </div>
                 );
-              })
-            ) : (
-              <div className="loading">Loading...</div>
-            )}
-          </div>
+              }
+            )
+          ) : (
+            <div className="loading">Loading...</div>
+          )}
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
 }

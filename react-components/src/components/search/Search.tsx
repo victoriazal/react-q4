@@ -1,43 +1,42 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import './Search.css';
 import Results from '../searchResults/Results';
 
-export default class Search extends Component {
-  state = {
-    searchValue: localStorage.getItem('inputData') || '',
-    filter: '',
-  };
+export default function Search() {
+  const [searchValue, setSearchValue] = useState(
+    localStorage.getItem('inputData') || ''
+  );
+  const [filter, setFilter] = useState('');
 
-  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
     const inputData = event.target.value;
     localStorage.setItem('inputData', inputData);
-    this.setState({ searchValue: inputData });
-  };
+    setSearchValue(inputData);
+  }
 
-  handleSearchClick = () => {
-    this.setState({ filter: this.state.searchValue });
-  };
-
-  render() {
-    return (
-      <>
-        <div className="search">
+  function handleSearchBtn() {
+    setFilter(searchValue);
+  }
+  return (
+    <>
+      <div className="search">
+        <form>
           <input
-            onChange={this.handleSearchChange}
+            onChange={handleSearchChange}
             className="search-input"
             placeholder="..."
-            value={this.state.searchValue || ''}
+            value={searchValue || ''}
           ></input>
           <button
-            onClick={this.handleSearchClick}
-            type="submit"
+            type="button"
             className="search-btn"
+            onClick={handleSearchBtn}
           >
             Search
           </button>
-        </div>
-        <Results filter={this.state.filter} />
-      </>
-    );
-  }
+        </form>
+      </div>
+      <Results clicked={filter} />
+    </>
+  );
 }
