@@ -4,7 +4,6 @@ import './Results.css';
 export default function Results(props: { clicked: string }) {
   const [characters, setCharacters] = useState([]);
   const [filteredCharacters, setFilteredCharacters] = useState([]);
-  const [filter] = useState(localStorage.getItem('inputValue') || '');
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -13,6 +12,7 @@ export default function Results(props: { clicked: string }) {
       .then(
         (data) => {
           setCharacters(data.results);
+          setFilteredCharacters(data.results);
           setIsLoaded(true);
         },
         (error) => {
@@ -21,6 +21,15 @@ export default function Results(props: { clicked: string }) {
         }
       );
   }, []);
+
+  useEffect(() => {
+    const filtered = characters.filter((character: { name: string }) =>
+      character.name.toLowerCase().replace(/\s/g, '').includes(props.clicked)
+    );
+    setFilteredCharacters(filtered);
+    console.log(filteredCharacters);
+    console.log(characters);
+  }, [props.clicked]);
 
   return (
     <>
