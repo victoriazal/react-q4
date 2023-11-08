@@ -12,7 +12,15 @@ export default function Results(props: { clicked: string }) {
       .then(
         (data) => {
           setCharacters(data.results);
-          setFilteredCharacters(data.results);
+          setFilteredCharacters(
+            data.results.filter((character: { name: string }) =>
+              character.name
+                .toLowerCase()
+                .replace(/\s/g, '')
+                .includes(localStorage.getItem('inputData') || '')
+            )
+          );
+          console.log(filteredCharacters);
           setIsLoaded(true);
         },
         (error) => {
