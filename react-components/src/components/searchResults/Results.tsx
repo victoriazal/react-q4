@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './Results.css';
 import Item from '../searchItem/SearchItem';
 import Pagination from '../pagination/Pagination';
+import { useContext } from 'react';
+import { SearchContext, CharactersContext } from '../search/Search';
 
-export default function Results(props: { clicked: string }) {
-  const [characters, setCharacters] = useState([]);
-  const [filteredCharacters, setFilteredCharacters] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+export default function Results() {
+  const characters = useContext(CharactersContext);
+  const filter = useContext(SearchContext);
+  const [filteredCharacters, setFilteredCharacters] = useState(
+    useContext(CharactersContext)
+  );
   const [isItemActive, setIsItemActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(4);
@@ -14,41 +18,17 @@ export default function Results(props: { clicked: string }) {
   const firstPostIndex = lastPostIndex - postsPerPage;
 
   useEffect(() => {
-    fetch('https://swapi.dev/api/people')
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          setCharacters(data.results);
-          setFilteredCharacters(
-            data.results.filter((character: { name: string }) =>
-              character.name
-                .toLowerCase()
-                .replace(/\s/g, '')
-                .includes(localStorage.getItem('inputData') || '')
-            )
-          );
-          console.log(filteredCharacters);
-          setIsLoaded(true);
-        },
-        (error) => {
-          console.log(error);
-          setIsLoaded(true);
-        }
-      );
-  }, []);
-
-  useEffect(() => {
     const filtered = characters.filter((character: { name: string }) =>
-      character.name.toLowerCase().replace(/\s/g, '').includes(props.clicked)
+      character.name.toLowerCase().replace(/\s/g, '').includes(filter)
     );
     setFilteredCharacters(filtered);
-  }, [props.clicked]);
+  }, [filter, characters]);
 
   return (
     <>
       <div className="wrapper">
         <div className="results">
-          {isLoaded ? (
+          {characters.length > 0 ? (
             filteredCharacters
               .slice(firstPostIndex, lastPostIndex)
               .map((elem: { id: string; name: string; birth_year: string }) => {
