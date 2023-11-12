@@ -1,0 +1,16 @@
+.page-btn {
+  color: chartreuse;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.active {
+  font-size: 18px;
+}
+
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
