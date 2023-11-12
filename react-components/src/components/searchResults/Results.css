@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+  min-height: calc(60vw);
+}
+.results {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 90px;
+  row-gap: 40px;
+}
+
+span {
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.loading {
+  color: white;
+}
